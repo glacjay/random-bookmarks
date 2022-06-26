@@ -4,7 +4,7 @@ module.exports = [
   // "activeTab",
   // "alarms",
   // "background",
-  // "bookmarks",
+  'bookmarks',
   // "browsingData",
   // "certificateProvider",
   // "clipboardRead",
@@ -53,7 +53,7 @@ module.exports = [
   // "search",
   // "sessions",
   // "signedInDevices",
-  "storage",
+  'storage',
   // "system.cpu",
   // "system.display",
   // "system.memory",
@@ -64,10 +64,10 @@ module.exports = [
   // "topSites",
   // "tts",
   // "ttsEngine",
-  "unlimitedStorage",
+  'unlimitedStorage',
   // "vpnProvider",
   // "wallpaper",
   // "webNavigation",
   // "webRequest",
   // "webRequestBlocking"
-]
+];
