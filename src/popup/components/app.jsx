@@ -1,10 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 const theQueryClient = new QueryClient();
 
 function App() {
   const [prevBookmark, setPrevBookmark] = useState(null);
+  useEffect(() => {
+    const loadPrevBookmark = async () => {
+      const backgroundPage = await browser.runtime.getBackgroundPage();
+      setPrevBookmark(backgroundPage.prevBookmark);
+    };
+    loadPrevBookmark();
+  });
 
   return (
     <QueryClientProvider client={theQueryClient}>
@@ -31,7 +38,10 @@ function App() {
                 const ok = confirm('delete this bookmark?');
                 if (ok) {
                   browser.bookmarks.remove(prevBookmark.id);
-                  setPrevBookmark(null);
+                  browser.runtime.sendMessage({
+                    action: 'setPrevBookmark',
+                    prevBookmark: null,
+                  });
                 }
               }}
             >
@@ -40,35 +50,30 @@ function App() {
           </div>
         )}
 
-        <Bookmarks setPrevBookmark={setPrevBookmark} />
+        <Bookmarks />
       </div>
     </QueryClientProvider>
   );
 }
 
-function Bookmarks({ bookmarkId, setPrevBookmark }) {
+function Bookmarks({ bookmarkId }) {
   const { data, error, isLoading } = useQuery(['bookmarks', bookmarkId], () =>
     browser.bookmarks.getChildren(bookmarkId || 'root________'),
   );
 
   if (error) return error.message;
   if (isLoading) return 'loading...';
-  console.log('xxx bookmarks', { data });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {data?.map((bookmark) => (
-        <BookmarkItem
-          key={bookmark.id}
-          bookmark={bookmark}
-          setPrevBookmark={setPrevBookmark}
-        />
+        <BookmarkItem key={bookmark.id} bookmark={bookmark} />
       ))}
     </div>
   );
 }
 
-function BookmarkItem({ bookmark, setPrevBookmark }) {
+function BookmarkItem({ bookmark }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const openBookmark = useCallback(async () => {
@@ -79,7 +84,10 @@ function BookmarkItem({ bookmark, setPrevBookmark }) {
       const index = Math.floor(Math.random() * children.length);
       const selectedBookmark = children[index];
       if (selectedBookmark.type === 'bookmark') {
-        setPrevBookmark(selectedBookmark);
+        browser.runtime.sendMessage({
+          action: 'setPrevBookmark',
+          prevBookmark: selectedBookmark,
+        });
         browser.tabs.create({ url: selectedBookmark.url });
         break;
       }
@@ -119,10 +127,7 @@ function BookmarkItem({ bookmark, setPrevBookmark }) {
 
       {!isCollapsed && (
         <div style={{ marginLeft: '2rem' }}>
-          <Bookmarks
-            bookmarkId={bookmark.id}
-            setPrevBookmark={setPrevBookmark}
-          />
+          <Bookmarks bookmarkId={bookmark.id} />
         </div>
       )}
     </div>

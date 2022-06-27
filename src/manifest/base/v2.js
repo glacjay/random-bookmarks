@@ -23,6 +23,7 @@ module.exports = {
   },
   background: {
     scripts: ['background.js'],
+    persistent: false,
   },
   web_accessible_resources: ['assets/**'],
   // ...(process.env.NODE_ENV === 'development' ? {
