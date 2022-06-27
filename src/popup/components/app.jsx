@@ -15,6 +15,10 @@ function App() {
           <div
             style={{
               display: 'flex',
+              width: '80%',
+              margin: '0 24px 8px 0',
+              borderBottom: '1px solid lightgray',
+              paddingBottom: 8,
               flexDirection: 'row',
               alignItems: 'center',
             }}
@@ -70,7 +74,7 @@ function BookmarkItem({ bookmark, setPrevBookmark }) {
   const openBookmark = useCallback(async () => {
     const children = await browser.bookmarks.getChildren(bookmark.id);
     if (!children.length) return;
-    const count = 0;
+    let count = 0;
     while (++count < 7) {
       const index = Math.floor(Math.random() * children.length);
       const selectedBookmark = children[index];
@@ -115,7 +119,10 @@ function BookmarkItem({ bookmark, setPrevBookmark }) {
 
       {!isCollapsed && (
         <div style={{ marginLeft: '2rem' }}>
-          <Bookmarks bookmarkId={bookmark.id} />
+          <Bookmarks
+            bookmarkId={bookmark.id}
+            setPrevBookmark={setPrevBookmark}
+          />
         </div>
       )}
     </div>
