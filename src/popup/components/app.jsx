@@ -4,17 +4,45 @@ import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 const theQueryClient = new QueryClient();
 
 function App() {
+  const [prevBookmark, setPrevBookmark] = useState(null);
+
   return (
     <QueryClientProvider client={theQueryClient}>
-      <div id="app-root">
+      <div id="app-root" style={{ display: 'flex', flexDirection: 'column' }}>
         <h3>Random Bookmarks</h3>
-        <Bookmarks />
+
+        {!!prevBookmark && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <a href={prevBookmark.url} style={{ flex: 1 }}>
+              {prevBookmark.title}
+            </a>
+            <button
+              onClick={() => {
+                const ok = confirm('delete this bookmark?');
+                if (ok) {
+                  browser.bookmarks.remove(prevBookmark.id);
+                  setPrevBookmark(null);
+                }
+              }}
+            >
+              delete
+            </button>
+          </div>
+        )}
+
+        <Bookmarks setPrevBookmark={setPrevBookmark} />
       </div>
     </QueryClientProvider>
   );
 }
 
-function Bookmarks({ bookmarkId }) {
+function Bookmarks({ bookmarkId, setPrevBookmark }) {
   const { data, error, isLoading } = useQuery(['bookmarks', bookmarkId], () =>
     browser.bookmarks.getChildren(bookmarkId || 'root________'),
   );
@@ -26,22 +54,28 @@ function Bookmarks({ bookmarkId }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {data?.map((bookmark) => (
-        <BookmarkItem key={bookmark.id} bookmark={bookmark} />
+        <BookmarkItem
+          key={bookmark.id}
+          bookmark={bookmark}
+          setPrevBookmark={setPrevBookmark}
+        />
       ))}
     </div>
   );
 }
 
-function BookmarkItem({ bookmark }) {
+function BookmarkItem({ bookmark, setPrevBookmark }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const openBookmark = useCallback(async () => {
     const children = await browser.bookmarks.getChildren(bookmark.id);
     if (!children.length) return;
-    while (true) {
+    const count = 0;
+    while (++count < 7) {
       const index = Math.floor(Math.random() * children.length);
       const selectedBookmark = children[index];
       if (selectedBookmark.type === 'bookmark') {
+        setPrevBookmark(selectedBookmark);
         browser.tabs.create({ url: selectedBookmark.url });
         break;
       }
