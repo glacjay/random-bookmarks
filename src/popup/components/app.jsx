@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 const theQueryClient = new QueryClient();
@@ -74,6 +74,10 @@ function Bookmarks({ bookmarkId }) {
 }
 
 function BookmarkItem({ bookmark }) {
+  const { data: childBookmarks } = useQuery(['bookmarks', bookmark.id], () =>
+    browser.bookmarks.getChildren(bookmark.id),
+  );
+
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const openBookmark = useCallback(async () => {
@@ -89,6 +93,7 @@ function BookmarkItem({ bookmark }) {
           prevBookmark: selectedBookmark,
         });
         browser.tabs.create({ url: selectedBookmark.url });
+        window.close();
         break;
       }
     }
@@ -111,17 +116,31 @@ function BookmarkItem({ bookmark }) {
             if (bookmark.type !== 'folder') return;
             setIsCollapsed((value) => !value);
           }}
-          style={{ width: '2rem', textAlign: 'center' }}
+          style={{
+            width: '2rem',
+            background: '#f8f8f8',
+            textAlign: 'center',
+            cursor: 'pointer',
+          }}
         >
           {bookmark.type === 'folder' ? (isCollapsed ? '>' : 'v') : ''}
         </div>
+
         <div
           onClick={() => {
             if (bookmark.type !== 'folder') return;
             openBookmark();
           }}
+          style={{ marginLeft: 4, cursor: 'pointer' }}
         >
           {bookmark.title}
+          {!!childBookmarks && (
+            <Fragment>
+              {' '}
+              ({childBookmarks.filter((b) => b.type === 'bookmark').length}/
+              {childBookmarks.length})
+            </Fragment>
+          )}
         </div>
       </div>
 
