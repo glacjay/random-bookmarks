@@ -3,15 +3,31 @@ import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 const theQueryClient = new QueryClient();
 
-function App() {
+function usePrevBookmark() {
   const [prevBookmark, setPrevBookmark] = useState(null);
   useEffect(() => {
     const loadPrevBookmark = async () => {
-      const backgroundPage = await browser.runtime.getBackgroundPage();
-      setPrevBookmark(backgroundPage.prevBookmark);
+      const results = await browser.storage.local.get('prevBookmark');
+      setPrevBookmark(results?.prevBookmark);
     };
     loadPrevBookmark();
-  });
+
+    const listener = (changes) => {
+      console.log('xxx', { changes });
+      for (const key of Object.keys(changes)) {
+        if (key === 'prevBookmark') {
+          setPrevBookmark(changes[key].newValue);
+        }
+      }
+    };
+    browser.storage.local.onChanged.addListener(listener);
+    return () => browser.storage.local.onChanged.removeListener(listener);
+  }, []);
+  return prevBookmark;
+}
+
+function App() {
+  const prevBookmark = usePrevBookmark();
 
   return (
     <QueryClientProvider client={theQueryClient}>
@@ -38,10 +54,7 @@ function App() {
                 const ok = confirm('delete this bookmark?');
                 if (ok) {
                   browser.bookmarks.remove(prevBookmark.id);
-                  browser.runtime.sendMessage({
-                    action: 'setPrevBookmark',
-                    prevBookmark: null,
-                  });
+                  browser.storage.local.set({ prevBookmark: null });
                 }
               }}
             >
@@ -88,10 +101,7 @@ function BookmarkItem({ bookmark }) {
       const index = Math.floor(Math.random() * children.length);
       const selectedBookmark = children[index];
       if (selectedBookmark.type === 'bookmark') {
-        browser.runtime.sendMessage({
-          action: 'setPrevBookmark',
-          prevBookmark: selectedBookmark,
-        });
+        browser.storage.local.set({ prevBookmark: selectedBookmark });
         browser.tabs.create({ url: selectedBookmark.url });
         window.close();
         break;
