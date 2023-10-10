@@ -1,5 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import { RandomTab } from './randomTab';
 
 const theQueryClient = new QueryClient();
 
@@ -13,7 +14,6 @@ function usePrevBookmark() {
     loadPrevBookmark();
 
     const listener = (changes) => {
-      console.log('xxx', { changes });
       for (const key of Object.keys(changes)) {
         if (key === 'prevBookmark') {
           setPrevBookmark(changes[key].newValue);
@@ -31,7 +31,10 @@ function App() {
 
   return (
     <QueryClientProvider client={theQueryClient}>
-      <div id="app-root" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        id="app-root"
+        style={{ display: 'flex', marginRight: 16, flexDirection: 'column' }}
+      >
         <h3>Random Bookmarks</h3>
 
         {!!prevBookmark && (
@@ -64,6 +67,8 @@ function App() {
         )}
 
         <Bookmarks />
+
+        <RandomTab />
       </div>
     </QueryClientProvider>
   );
