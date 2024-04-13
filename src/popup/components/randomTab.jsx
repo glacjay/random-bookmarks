@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 
-const RANDOM_TAB_KEY = 'randomTab';
+const RANDOM_TAB_KEY = "randomTab";
 const SURROUNDING_COUNT = 7;
 const HALF_SURROUNDING_COUNT = Math.floor(SURROUNDING_COUNT / 2);
 
@@ -39,7 +39,6 @@ export function RandomTab() {
       Math.max(0, index - HALF_SURROUNDING_COUNT),
       Math.min(tabs.length, index + HALF_SURROUNDING_COUNT + 1),
     );
-    console.log('xxx', { index, selectedTab, surroundingTabs });
     browser.storage.local.set({
       [RANDOM_TAB_KEY]: { selectedTab, surroundingTabs },
     });
@@ -48,17 +47,28 @@ export function RandomTab() {
 
   return (
     <div>
-      <hr style={{ width: '100%' }} />
+      <hr style={{ width: "100%" }} />
 
       <button onClick={pickRandomTab}>Random Tab</button>
+
       {randomTab?.surroundingTabs?.map((tab) => (
         <p
           key={tab.id}
           style={{
-            color: tab.id === randomTab?.selectedTab?.id ? 'red' : 'black',
+            color: tab.id === randomTab?.selectedTab?.id ? "red" : "black",
           }}
         >
-          tab: <a href={tab.url}>{tab.title}</a>
+          <button
+            onClick={() => browser.tabs.update(tab.id, { active: true })}
+            style={{
+              background: "none",
+              padding: 0,
+              color: tab.id === randomTab?.selectedTab?.id ? "red" : "black",
+            }}
+          >
+            tab
+          </button>
+          : <a href={tab.url}>{tab.title}</a>
         </p>
       ))}
     </div>
