@@ -33,7 +33,7 @@ export function RandomTab() {
 
   const pickRandomTab = useCallback(async () => {
     const tabs = await browser.tabs.query({ currentWindow: true });
-    const index = Math.floor(Math.random() * tabs.length);
+    const index = Math.floor(Math.random() ** 2 * tabs.length);
     const selectedTab = tabs[index];
     const surroundingTabs = tabs.slice(
       Math.max(0, index - HALF_SURROUNDING_COUNT),
