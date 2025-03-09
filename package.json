@@ -30,13 +30,16 @@
   "author": "Debdut Karmakar <iawaiponly@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "dexie": "^3.2.1",
+    "dexie": "^3.2.7",
     "lodash": "^4.17.21",
     "rambda": "^7.0.3",
     "react": "^18.1.0",
     "react-dom": "^18.0.0",
     "react-query": "^3.39.1",
     "rxjs": "^7.5.5"
+  },
+  "dependencies comments": {
+    "upgraded": "dexie"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
@@ -68,5 +71,6 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.8.0"
-  }
+  },
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
 }

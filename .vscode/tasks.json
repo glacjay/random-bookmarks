@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "options": {
+    "env": {
+      "https_proxy": "http://127.0.0.1:7322"
+    }
+  },
+  "tasks": [
+    {
+      "label": "pnpm install",
+      "type": "shell",
+      "command": "pnpm install",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

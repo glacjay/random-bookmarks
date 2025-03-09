@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const RANDOM_TAB_KEY = "randomTab";
 const SURROUNDING_COUNT = 7;
@@ -29,9 +30,14 @@ function useRandomTab() {
 }
 
 export function RandomTab() {
-  const randomTab = useRandomTab();
+  let randomTab = useRandomTab();
 
-  const pickRandomTab = useCallback(async () => {
+  let { data: tabsCount } = useQuery("tabsCount", async () => {
+    const tabs = await browser.tabs.query({ currentWindow: true });
+    return tabs.length;
+  });
+
+  let pickRandomTab = useCallback(async () => {
     const tabs = await browser.tabs.query({ currentWindow: true });
     const index = Math.floor(Math.random() ** 2 * tabs.length);
     const selectedTab = tabs[index];
@@ -49,7 +55,10 @@ export function RandomTab() {
     <div>
       <hr style={{ width: "100%" }} />
 
-      <button onClick={pickRandomTab}>Random Tab</button>
+      <div>
+        <button onClick={pickRandomTab}>Random Tab</button>
+        <span> ({tabsCount})</span>
+      </div>
 
       {randomTab?.surroundingTabs?.map((tab) => (
         <p
