@@ -5,6 +5,11 @@ import App from "./components/app";
 
 import "./index.scss";
 
+import { initDoubanUrlCleaner } from "./douban-note";
+
+// Initialize Douban URL cleaner
+initDoubanUrlCleaner();
+
 const container = document.createElement("popup");
 document.body.appendChild(container);
 
