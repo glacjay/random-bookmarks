@@ -15,7 +15,7 @@ module.exports = {
   },
   content_scripts: [
     {
-      matches: ["*://*.douban.com/note/*"],
+      matches: ["*://*.douban.com/*"],
       js: ["content.js"],
     },
   ],

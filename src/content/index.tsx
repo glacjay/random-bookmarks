@@ -5,7 +5,7 @@ import App from "./components/app";
 
 import "./index.scss";
 
-import { initDoubanUrlCleaner } from "./douban-note";
+import { initDoubanUrlCleaner } from "./douban-url-cleaner";
 
 // Initialize Douban URL cleaner
 initDoubanUrlCleaner();

@@ -1,10 +1,16 @@
-// Clean up Douban note URLs by removing query parameters
+// Clean up Douban URLs by removing _i parameter
 const cleanUrlIfNeeded = () => {
-  if (window.location.href.match(/^https?:\/\/.*?douban\.com\/note\//)) {
+  if (window.location.href.match(/^https?:\/\/.*?douban\.com\//)) {
     setTimeout(() => {
       const url = new URL(window.location.href);
-      if (url.search) {
-        history.replaceState(null, "", `${url.pathname}${url.hash}`);
+      if (url.searchParams.has("_i")) {
+        url.searchParams.delete("_i");
+        const newSearch = url.searchParams.toString();
+        history.replaceState(
+          null,
+          "",
+          `${url.pathname}${newSearch ? "?" + newSearch : ""}${url.hash}`,
+        );
       }
     }, 2000);
   }
