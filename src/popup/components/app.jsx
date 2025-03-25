@@ -1,6 +1,7 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { RandomTab } from "./randomTab";
+import { UrlUpdater } from "./urlUpdater";
 
 const theQueryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ function App() {
 
         <Bookmarks />
 
+        <UrlUpdater />
         <RandomTab />
       </div>
     </QueryClientProvider>

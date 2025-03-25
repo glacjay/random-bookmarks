@@ -10,10 +10,10 @@ import { initDoubanUrlCleaner } from "./douban-url-cleaner";
 // Initialize Douban URL cleaner
 initDoubanUrlCleaner();
 
-const container = document.createElement("popup");
-document.body.appendChild(container);
+// const container = document.createElement("popup");
+// document.body.appendChild(container);
 
-const root = createRoot(container);
-root.render(<App />);
+// const root = createRoot(container);
+// root.render(<App />);
 
 console.log("Content Script 👋");
