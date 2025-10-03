@@ -3,14 +3,16 @@ const cleanUrlIfNeeded = () => {
   if (window.location.href.match(/^https?:\/\/.*?douban\.com\//)) {
     setTimeout(() => {
       const url = new URL(window.location.href);
-      if (url.searchParams.has("_i")) {
-        url.searchParams.delete("_i");
-        const newSearch = url.searchParams.toString();
-        history.replaceState(
-          null,
-          "",
-          `${url.pathname}${newSearch ? "?" + newSearch : ""}${url.hash}`,
-        );
+      for (let paramToClean of ["_i", "_spm_id"]) {
+        if (url.searchParams.has(paramToClean)) {
+          url.searchParams.delete(paramToClean);
+          const newSearch = url.searchParams.toString();
+          history.replaceState(
+            null,
+            "",
+            `${url.pathname}${newSearch ? "?" + newSearch : ""}${url.hash}`,
+          );
+        }
       }
     }, 2000);
   }

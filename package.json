@@ -2,10 +2,13 @@
   "name": "browser-extension",
   "version": "0.0.1",
   "description": "Browser Extension Boilerplate",
+  "author": "Debdut Karmakar <iawaiponly@gmail.com>",
+  "license": "ISC",
   "engines": {
     "node": ">=16.13.1",
     "npm": ">=8.1.2"
   },
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321",
   "scripts": {
     "test": "mocha",
     "clean": "rm -rf dist",
@@ -27,8 +30,6 @@
     "start:firefox": "concurrently npm:watch:firefox npm:reload:firefox",
     "start": "concurrently npm:watch:chrome npm:reload:brave npm:watch:firefox npm:reload:firefox"
   },
-  "author": "Debdut Karmakar <iawaiponly@gmail.com>",
-  "license": "ISC",
   "dependencies": {
     "dexie": "^3.2.7",
     "react": "^18.1.0",
@@ -54,8 +55,8 @@
     "dotenv": "^16.0.0",
     "generate-json-from-js-webpack-plugin": "^0.1.1",
     "html-webpack-plugin": "^5.5.0",
-    "node-sass": "^7.0.1",
     "postcss-loader": "^6.2.1",
+    "sass": "^1.93.2",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.24",
@@ -69,6 +70,5 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.8.0"
-  },
-  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
+  }
 }
